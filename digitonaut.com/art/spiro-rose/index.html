@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<!-- Mirrored from digitonaut.com/art/spiro-rose/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Feb 2023 10:35:25 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset='utf-8'\>
+<meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'><title>Spiro-rose</title>
+
+<style>
+canvas {
+	position:fixed;
+	left:50%; top:50%;
+	transform:translate(-50%,-50%);
+	border:0px; outline:0px;
+}
+</style>
+</head>
+<body style='margin:0px;overflow:hidden;background:#000;'>
+
+<script type="application/processing">
+final float ELLIPSE_MULT_MIN = 1; // min size multiplier for ellipse
+final float ELLIPSE_MULT_MAX = 200; // max size multiplier for ellipse
+final float ELLIPSE_BASE_W = 3; // ellipse base width
+final float ELLIPSE_BASE_H = 1; // ellipse base height
+final int ELLIPSE_XOFF = -60; // ellipse x-offset from centre of sketch
+final int ELLIPSE_YOFF = -60; // ellipse y-offset from centre of sketch
+final float ELLIPSE_PERIOD = TWO_PI / 1080; // period of sine wave governing ellipse size
+final float SKETCH_ROT = TWO_PI / 600; // speed at which sketch canvas rotates
+final int BACKLIGHT = 16; // background brightness value
+final int DRAW_SPEED = 1; // # of iterations to draw per frame
+
+boolean drawMe = true; // for pause/resume
+int drawFrame = 0; // pause/resume ability means we can't use frameCount
+
+void setup() {
+  frameRate(120);
+  //fullscreen(P2D);
+  size(screenWidth,screenHeight,P2D);
+  colorMode(HSB, 360, 100, 100);
+  background(0,0,30,100);
+  noFill();
+  strokeWeight(1);
+}
+
+void draw() {
+  if (drawMe) {
+		for (int i = 0; i < DRAW_SPEED; i++) {
+			float x = drawFrame * ELLIPSE_PERIOD;
+			x -= HALF_PI; // start at sin(x) = 0
+			float amplitude = ELLIPSE_MULT_MAX - ELLIPSE_MULT_MIN;
+			float ellipseMult = (sin(x) * amplitude) / 2; // sine wave to control size of ellipse
+			ellipseMult += amplitude/2 + ELLIPSE_MULT_MIN; // ELLIPSE_MULT_MIN <= sine values <= ELLIPSE_MULT_MAX
+			float w = ELLIPSE_BASE_W * ellipseMult;
+			float h = ELLIPSE_BASE_H * ellipseMult;
+
+			pushMatrix();
+			translate(width/2, height/2);
+			rotate(drawFrame * SKETCH_ROT);
+			stroke(drawFrame % 360, 100,100,100); //stroke(200, 65, 80, 100); // use this for blue similar to https://gfycat.com/JointRealisticGrouper
+			ellipse(ELLIPSE_XOFF, ELLIPSE_YOFF, w, h);
+			popMatrix();
+
+			drawFrame++;
+		}
+  }
+}
+
+void keyPressed() {
+	// press space to pause/resume
+  if (key == ' ') {
+    drawMe = drawMe ? false : true; 
+  } else {
+		// press 1-9 to change draw speed
+		// ghetto char to int, probably will break one day
+		int num = (int(key)) - 48; // ascii 0-9 = 48-57
+		if ((num > 0) && (num < 10)) {
+			DRAW_SPEED = num;
+		}
+	}
+}
+</script>
+
+<canvas> </canvas>
+<script src='processing.min.js'></script>
+</body>
+
+<!-- Mirrored from digitonaut.com/art/spiro-rose/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Feb 2023 10:35:26 GMT -->
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<!-- Mirrored from digitonaut.com/art/seeding/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Feb 2023 10:32:55 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset='utf-8'\>
+<meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'><title>Seeding</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<css-doodle>
+  <style>
+    @grid: 50x1 / 50vmin;
+    :container {
+      perspective: 23vmin;
+    }
+    background: @m(
+      @r(200, 240), 
+      radial-gradient(
+        @p(#00b8a9, #f8f3d4, #f6416c, #ffde7d) 15%,
+        transparent 50%
+      ) @r(100%) @r(100%) / @r(1%, 3%) @lr no-repeat
+    );
+
+    @size: 80%;
+    @place-cell: center;
+
+    border-radius: 50%;
+    transform-style: preserve-3d;
+    animation: scale-up 20s linear infinite;
+    animation-delay: calc(@i * -.4s);
+
+    @keyframes scale-up {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) rotate(0);
+      }
+      10% { 
+        opacity: 1; 
+      }
+      95% {
+        transform:
+          translate3d(0, 0, @r(50vmin, 55vmin))
+          rotate(@r(-360deg, 360deg));
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(0, 0, 1vmin);
+      }
+    }
+  </style>
+</css-doodle>
+  <script src='css-doodle.min.js'></script>
+</body>
+
+<!-- Mirrored from digitonaut.com/art/seeding/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Feb 2023 10:32:56 GMT -->
+</html>

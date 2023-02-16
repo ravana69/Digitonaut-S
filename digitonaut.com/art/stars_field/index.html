@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from digitonaut.com/art/stars_field/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Feb 2023 10:36:01 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset='utf-8'\>
+<meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'><title>Stars Field</title>
+
+<script src="shader-web-background.min.js"></script>
+
+<script type="x-shader/x-fragment" id="Image">
+precision highp float;
+uniform vec2  iResolution;
+uniform float iTime;
+
+// -------------------------------------------------------------------------------------------------- Paste your Shadertoy code here:
+
+float flare( vec2 U )                            // rotating hexagon 
+{	vec2 A = sin(vec2(0, 1.57) + iTime);
+    U = abs( U * mat2(A, -A.y, A.x) ) * mat2(2,0,1,1.7); 
+    return .2/max(U.x,U.y);                      // glowing-spiky approx of step(max,.2)
+  
+ 
+}
+
+#define r(x)     fract(1e4*sin((x)*541.17))      // rand, signed rand   in 1, 2, 3D.
+#define sr2(x)   ( r(vec2(x,x+.1)) *2.-1. )
+#define sr3(x)   ( r(vec4(x,x+.1,x+.2,0)) *2.-1. )
+
+void mainImage( out vec4 O, vec2 U )
+{
+    vec2 R = iResolution.xy;
+    U =  (U+U - R) / R.y;
+	O -= O+.3;
+    for (float i=0.; i<99.; i++)
+        O += flare (U - sr2(i)*R/R.y )           // rotating flare at random location
+              * r(i+.2)                          // random scale
+              * (1.+sin(vec4(iTime,iTime,iTime,iTime).w+r(i+.3)*6.))*.1  // time pulse
+              //* (1.+.1*sr3(i+.4));               // random color - uncorrelated
+              * (1.+.1*sr3(i));                  // random color - correlated
+}
+
+// -------------------------------------------------------------------------------------------------- End of Shadertoy code
+
+
+void main() {
+mainImage(gl_FragColor, gl_FragCoord.xy);
+}
+</script>
+<script>
+shaderWebBackground.shade({
+	shaders: {
+		Image: {
+			uniforms: {
+				iResolution: (gl, loc, ctx) => gl.uniform2f(loc, ctx.width, ctx.height),
+				iTime: (gl, loc) => gl.uniform1f(loc, performance.now() / 1000)
+			}
+		}
+	}
+});
+</script>
+</head>
+<body>
+</body>
+
+<!-- Mirrored from digitonaut.com/art/stars_field/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Feb 2023 10:36:02 GMT -->
+</html>

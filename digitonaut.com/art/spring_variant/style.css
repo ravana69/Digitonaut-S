@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+}
+
+canvas {
+  position: fixed;
+  touch-action: none;
+  cursor: pointer;
+  filter: contrast(1.1) brightness(1.3);
+}
+
+#ca {
+  position: absolute;
+  z-index: -2;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  mix-blend-mode: screen;
+  cursor: pointer;
+}
+
+#webgl {
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  mix-blend-mode: multiply;
+}

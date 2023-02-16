@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<!-- Mirrored from digitonaut.com/art/signed_plasma/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Feb 2023 10:33:32 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset='utf-8'\>
+<meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'><title>Signed Plasma</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="container"></div>
+<script id="vertexShader" type="x-shader/x-vertex">
+
+  void main() {
+    gl_Position = vec4(position, 1.0);
+  }
+
+</script>
+
+<script id="fragmentShader" type="x-shader/x-fragment">
+  uniform vec2 iResolution;
+  uniform float iGlobalTime;
+  uniform sampler2D iChannel0;
+  
+  float f(vec2 a, vec2 b) {
+    return dot(a, b) * exp(-a.x*a.x -a.y*a.y);
+  }
+  void main(void) {
+  vec2 uv = (gl_FragCoord.xy - iResolution.xy*.5) / max(iResolution.x, iResolution.y);
+  gl_FragColor = vec4(0);
+  uv *= 10.0;
+  float c = 0.0;
+    for(float a = 0.0; a<=3.0; a+=0.05) {
+      vec4 t = texture2D(iChannel0, vec2(sin(a), cos(a)) * iGlobalTime * 0.005 * a);
+        vec3 color = mix(vec3(1,0.5,0), vec3(0,0.5,1), a/3.0);
+      gl_FragColor.rgb += color * f(uv - (t.ba*2.0-1.0), t.rg*2.0-1.0);
+    }
+    gl_FragColor += 0.821345;
+  }
+
+</script>
+<!-- partial -->
+  <script src='three.min.js'></script>
+  <script  src="script.js"></script>
+
+</body>
+
+<!-- Mirrored from digitonaut.com/art/signed_plasma/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Feb 2023 10:33:37 GMT -->
+</html>

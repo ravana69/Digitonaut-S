@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<!-- Mirrored from digitonaut.com/art/sea_of_modulation/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Feb 2023 10:32:53 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset='utf-8'\>
+<meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'><title>Sea Of Modulation</title>
+
+<script src="shader-web-background.min.js"></script>
+<script type="x-shader/x-fragment" id="Image">
+precision highp float;
+uniform vec2  iResolution;
+uniform float iTime;
+
+// -------------------------------------------------------------------------------------------------- Shadertoy code
+const float time_offset = 0.0;
+const float speed = 0.2;
+const float horizon = 0.51;
+const float elevation = 30.0;
+const float contrast = 15.0;
+const float fog = 0.5;
+const float modulation1 = 1.2;
+const float modulation2 = 2.0;
+
+mat2 rotate(float t)
+{
+    float c = cos(t);
+    float s = sin(t);
+    return mat2(c, -s, s, c);
+}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    vec2 uv = fragCoord / iResolution.xy - 0.5;    // coordinates [-0.5, +0.5]
+    uv *= elevation / (horizon - uv.y);            // simple 3D projection
+    float t = (iTime + time_offset) * speed;       // time
+    
+    vec2 m = t + sin(uv + sin(uv * rotate(t) * modulation1));
+    float f = sin(length(m) * modulation2) * contrast / (elevation + uv.y * fog);
+
+    fragColor = vec4(0.5 + f, 0.0, 0.5 - f, 1.0);
+}
+// -------------------------------------------------------------------------------------------------- End of Shadertoy code
+
+void main() {
+	mainImage(gl_FragColor, gl_FragCoord.xy);
+}
+</script>
+<script>
+shaderWebBackground.shade({
+	shaders: {
+		Image: {
+			uniforms: {
+				iResolution: (gl, loc, ctx) => gl.uniform2f(loc, ctx.width, ctx.height),
+				iTime: (gl, loc) => gl.uniform1f(loc, performance.now() / 1000)
+			}
+		}
+	}
+});
+</script>
+</head>
+<body>
+</body>
+
+<!-- Mirrored from digitonaut.com/art/sea_of_modulation/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Feb 2023 10:32:53 GMT -->
+</html>
